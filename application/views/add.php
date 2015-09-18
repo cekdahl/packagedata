@@ -27,8 +27,16 @@
 			    	<textarea class="form-control" name="description" id="description" rows="5" placeholder="Description"><?php echo set_value('description', $package['description']); ?></textarea>
 			    </div>
 			    
+			    <div class="form-group">
+			    	<label for="description">Usage examples</label>
+			    	<p>Only use this text field for substantial examples — otherwise leave it empty. A sentence or two does not warrant the use of this field, the content of which will be displayed on its own page separate from the package list. The user should be able to determine whether the package is good for him or not based on these examples.</p>
+			    	<p>The use of images is encouraged. Use an image host that is reliable, such as <a href="http://imgur.com/">imgur.com</a>. You can upload images directly from Mathematica to imgur with the <a href="https://github.com/halirutan/Mathematica-SE-Tools">Mathematica Tools for Stack Exchange</a> package.</p>
+			    	<p>HTML may be used to style the post. For example <code><?php echo htmlentities('<img src="url/image.png">'); ?></code> and <code><?php echo htmlentities('<b>bold</b>'); ?></code>.</p>
+			    	<textarea class="form-control" name="examples" id="examples" rows="5" placeholder=""><?php echo set_value('examples', $package['examples']); ?></textarea>
+			    </div>
+			    
 			    <?php if( !is_logged_in() ): ?>
-			    <p><div class="g-recaptcha" data-sitekey="<?php echo $this->config->item('captcha_key'); ?>"></div></p>
+			    <p><div class="g-recaptcha" data-sitekey="6Lev3QsTAAAAAP3Mqp7bWbjdO-hSImCvOD2244rw"></div></p>
 				<?php endif; ?>
 			    
 			    <div class="form-group">

@@ -22,19 +22,49 @@ class Packages_model extends CI_Model {
 		$this->form_validation->set_rules('name', 'package name', 'required|min_length[1]|max_length[100]');
 		$this->form_validation->set_rules('url', 'package URL', 'required|max_length[100]|prep_url|valid_url');
 		$this->form_validation->set_rules('description', 'package description', 'required|min_length[15]|max_length[10000]');
+		$this->form_validation->set_rules('examples', 'package usage examples', 'max_length[10000]');
 	
 		if( $this->form_validation->run() )
 		{
 			$ins1 = FALSE;
 			$ins2 = FALSE;
 		
+			$this->load->library('parsedown');
+		
+			$examples = $this->input->post('examples');
+			if( strlen($examples) > 10 )
+			{
+				$has_examples = TRUE;
+			}
+			else
+			{
+				$has_examples = FALSE;
+				$examples = NULL;
+			}
+			
+			if( $has_examples )
+			{
+				$examples_rendered = $this->parsedown->text($examples);
+			}
+			else
+			{
+				$examples_rendered = NULL;
+			}
+		
+			$description = $this->input->post('description');
+			$description_rendered = $this->parsedown->text($description);
+					
 			if( isset($_SESSION['logged_in']) )
 			{
 				$ins1 = $this->db->insert('packages', array(
 					'status' => 'published',
 					'name' => $this->input->post('name'),
 					'url' => $this->input->post('url'),
-					'description' => $this->input->post('description'),
+					'description' => $description,
+					'description_rendered' => $description_rendered,
+					'examples' => $examples,
+					'examples_rendered' => $examples_rendered,
+					'has_examples' => $has_examples,
 					'user_id' => $_SESSION['user_id'],
 					'display_name' => $_SESSION['display_name']
 				));		 
@@ -51,7 +81,9 @@ class Packages_model extends CI_Model {
 					'status' => 'pending',
 					'name' => $this->input->post('name'),
 					'url' => $this->input->post('url'),
-					'description' => $this->input->post('description')
+					'description' => $this->input->post('description'),
+					'examples' => $this->input->post('examples'),
+					'has_examples' => (strlen($this->input->post('examples')) > 10) ? 1 : 0
 				));
 			}
 			

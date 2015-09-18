@@ -77,7 +77,9 @@ class Links extends CI_Controller {
 			    'name' => '',
 			    'url' => '',
 			    'keywords' => '',
-			    'description' => ''
+			    'description' => '',
+			    'examples' => '',
+			    'has_examples' => FALSE
 			));
 
 		$uri = $this->uri->uri_to_assoc();
@@ -92,7 +94,9 @@ class Links extends CI_Controller {
 					'name' => $package_data['name'],
 					'url' => $package_data['url'],
 					'keywords' => $this->packages_model->get_keywords_str($package_data['id']),
-					'description' => $package_data['description']
+					'description' => $package_data['description'],
+					'examples' => $package_data['examples'],
+					'has_examples' => $package_data['has_examples']
 				);
 			}
 		}
@@ -166,6 +170,23 @@ class Links extends CI_Controller {
 			);
 		
 		load_template('history', $data);
+	}
+	
+	public function examples()
+	{
+		$uri = $this->uri->uri_to_assoc();
+		
+		if( !isset($uri['id']) )
+		{
+			redirect('links/');
+		}
+		
+		$data = array(
+				'oauth_link' => oauth_link(),
+				'package' => $this->packages_model->get_package_data($uri['id'])
+			);
+		
+		load_template('examples', $data);
 	}
 	
 	public function redirect_to($package_id = FALSE, $parent_id = FALSE)
