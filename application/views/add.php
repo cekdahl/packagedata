@@ -36,7 +36,7 @@
 			    </div>
 			    
 			    <?php if( !is_logged_in() ): ?>
-			    <p><div class="g-recaptcha" data-sitekey="6Lev3QsTAAAAAP3Mqp7bWbjdO-hSImCvOD2244rw"></div></p>
+					<p><div class="g-recaptcha" data-sitekey="<?php echo $this->config->item('captcha_key'); ?>"></div></p>
 				<?php endif; ?>
 			    
 			    <div class="form-group">
