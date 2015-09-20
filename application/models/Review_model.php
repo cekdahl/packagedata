@@ -184,8 +184,8 @@ class Review_model extends CI_Model {
 				if(isset($package['description_rendered']))
 				{
 					$package['description'] = $package['description_rendered'];
-					return $package;
 				}
+				return $package;
 			}
 			
 			return FALSE;
