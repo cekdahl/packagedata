@@ -45,6 +45,7 @@ class Packages_model extends CI_Model {
 			if( $has_examples )
 			{
 				$examples_rendered = $this->parsedown->text($examples);
+				$examples_rendered = str_replace('<pre>', '<pre class="prettyprint lang-mma">', $examples_rendered);
 			}
 			else
 			{
@@ -53,7 +54,7 @@ class Packages_model extends CI_Model {
 		
 			$description = $this->input->post('description');
 			$description_rendered = $this->parsedown->text($description);
-					
+			
 			if( isset($_SESSION['logged_in']) )
 			{
 				$ins1 = $this->db->insert('packages', array(
@@ -82,13 +83,26 @@ class Packages_model extends CI_Model {
 					'name' => $this->input->post('name'),
 					'url' => $this->input->post('url'),
 					'description' => $this->input->post('description'),
-					'examples' => $this->input->post('examples'),
+					'description_rendered' => $description_rendered,
+					'examples' => $examples,
+					'examples_rendered' => $examples_rendered,
 					'has_examples' => (strlen($this->input->post('examples')) > 10) ? 1 : 0
 				));
 			}
 			
 			if( $ins1 || $ins2 )
 			{
+				if(!isset($_SESSION['logged_in'])) {
+					$admin_email = $this->config->item('admin_email');
+					if($admin_email !== NULL) {
+					    $headers = 'From: admin@packagedata.net' . "\r\n" .
+					        'Reply-To: admin@packagedata.net' . "\r\n" .
+					        'X-Mailer: PHP/' . phpversion();
+					
+					    mail($admin_email, 'New post', 'A new post (or edit to a post) has been submitted by an anonymous user.', $headers);
+					}
+				}
+			
 				$insert_id = $this->db->insert_id();
 		
 				if( $parent_id === NULL )
@@ -96,6 +110,8 @@ class Packages_model extends CI_Model {
 				    $this->db->where('id', $insert_id)->update('packages', array(
 				    	'parent_id' => $insert_id
 				    ));
+				    
+				    $parent_id = $insert_id;
 				}
 				else
 				{
@@ -111,8 +127,17 @@ class Packages_model extends CI_Model {
 				    ));
 				}
 				
-				$this->add_keywords( $insert_id );
+				if($ins1 && isset($_SESSION['logged_in']))
+				{
+					$this->db->where(array(
+					'id !=' => $insert_id,
+					'parent_id' => $parent_id,
+					'user_id' => $_SESSION['user_id']
+					))->where('TIMESTAMPDIFF(MINUTE, timestamp, NOW()) <= 5')->delete('packages');
+				}
 				
+				$this->add_keywords( $insert_id );
+								
 				return TRUE;
 			}
 			
@@ -164,7 +189,7 @@ class Packages_model extends CI_Model {
 		}
 	}
 
-	public function list_packages($status = 'published', $sort = 'alphabetically')
+	public function list_packages($status = 'published', $sort = 'alphabetically', $keyword = NULL, $has_examples = 'false')
 	{
 		if($sort == 'alphabetically')
 		{
@@ -185,9 +210,13 @@ class Packages_model extends CI_Model {
 			WHERE $tbl_packages.status = ?
 			ORDER BY $tbl_forwards.nr_of_forwards DESC", array($status))->result_array();
 			
-			foreach($packages as &$package)
+			foreach($packages as $key => $package)
 			{
-				$package['keywords'] = $this->get_keywords($package['id']);
+				$packages[$key]['keywords'] = $this->get_keywords($package['id']);
+				if(isset($keyword) && !in_array($keyword, $packages[$key]['keywords']))
+				{
+					unset($packages[$key]);
+				}
 			}
 			
 			return $packages;
@@ -201,9 +230,22 @@ class Packages_model extends CI_Model {
 		
 		$packages = $this->db->get('packages')->result_array();
 		
-		foreach($packages as &$package)
+		foreach($packages as $key => $package)
 		{
-		    $package['keywords'] = $this->get_keywords($package['id']);
+			if(isset($package['description_rendered']))
+			{
+				$packages[$key]['description'] = $package['description_rendered'];
+			}
+		
+		    $packages[$key]['keywords'] = $this->get_keywords($package['id']);
+		    if(isset($keyword) && !in_array($keyword, $packages[$key]['keywords']))
+		    {
+		    	unset($packages[$key]);
+		    }
+		    elseif(!$packages[$key]['has_examples'] && $has_examples == 'true' )
+		    {
+				unset($packages[$key]);
+		    }
 		}
 		
 		return $packages;
@@ -218,7 +260,13 @@ class Packages_model extends CI_Model {
 			
 			if( $q->num_rows() > 0 )
 			{
-				return $q->row_array();
+				$package = $q->row_array();
+				
+				if(isset($package['description_rendered']))
+				{
+					$package['description'] = $package['description_rendered'];
+					return $package;
+				}
 			}
 			
 			return FALSE;
@@ -272,13 +320,13 @@ class Packages_model extends CI_Model {
 		$tbl_packages = $this->db->dbprefix('packages');
 		$tbl_delete_requests = $this->db->dbprefix('delete_requests');
 		$packages = $this->db->query("(
-		SELECT 'link' as `type`, `id`, `status`, `name`, `url`, `description`, `timestamp`
+		SELECT 'link' as `type`, `id`, `status`, `name`, `url`, `description`, `description_rendered`, `timestamp`
 		FROM `$tbl_packages`
 		WHERE parent_id = ?
 		)
 		UNION
 		(
-		SELECT 'request' as `type`, NULL, `status`, NULL AS `name`, NULL AS `url`, `comment` AS `description`, `timestamp`
+		SELECT 'request' as `type`, NULL, `status`, NULL AS `name`, NULL AS `url`, `comment` AS `description`, NULL AS `description_rendered`, `timestamp`
 		FROM `$tbl_delete_requests`
 		WHERE package_id = ?
 		) ORDER BY `timestamp` DESC", array($package_id, $package_id))->result_array();
@@ -287,6 +335,11 @@ class Packages_model extends CI_Model {
 		{
 			if($package['type'] == 'link')
 			{
+				if(isset($package['description_rendered']))
+				{
+					$package['description'] = $package['description_rendered'];
+				}
+			
 				$package['keywords'] = $this->get_keywords($package['id']);
 			}
 		}
@@ -319,7 +372,6 @@ class Packages_model extends CI_Model {
 	public function add_delete_request()
 	{
 		$id = $this->input->post('parent_id');
-		
 		
 		if( !$this->get_package_data($id) )
 		{
@@ -354,6 +406,15 @@ class Packages_model extends CI_Model {
 			}
 			else
 			{
+			    $admin_email = $this->config->item('admin_email');
+			    if($admin_email !== NULL) {
+			        $headers = 'From: admin@packagedata.net' . "\r\n" .
+			            'Reply-To: admin@packagedata.net' . "\r\n" .
+			            'X-Mailer: PHP/' . phpversion();
+			    
+			        mail($admin_email, 'New delete request', 'A delete request has been made by an anonymous user.', $headers);
+			    }
+			
 				$this->session->set_flashdata('success_message', 'Your request to delete a link is now pending review. You can see the status of the request by using the history button.');
 				redirect('links/');
 			}

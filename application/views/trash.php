@@ -17,6 +17,9 @@
 			<div class="col-md-12">
 				<h2><a href="<?php echo $package['url']; ?>"><?php echo $package['name']; ?></a></h2>
 				<p><?php echo $package['description']; ?></p>
+				<?php if($package['has_examples']): ?>
+				<p><a href="<?php echo site_url('review/examples/id/' . $package['id']); ?>" class="btn btn-default">Usage examples</a></p>
+				<?php endif; ?>
 				<p>
 					<span class="label label-primary">Last updated <?php echo date('F j, Y', strtotime($package['timestamp'])); ?></span>
 					<?php foreach($package['keywords'] as $keyword): ?>

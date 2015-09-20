@@ -20,6 +20,14 @@
 				margin-bottom: 20px;
 			}
 		}
+		.label a {
+			color: white;
+		}
+		#preview {
+			background: #fafafa;
+			margin-top: 15px;
+			padding: 10px;
+		}
 	</style>
    
     <!-- HTML5 shim and Respond.js for IE8 support of HTML5 elements and media queries -->
@@ -30,6 +38,11 @@
     
 	<script src='https://www.google.com/recaptcha/api.js'></script>
 	
+	<link href="<?php echo base_url(); ?>assets/prettify/prettify.css" type="text/css" rel="stylesheet">
+	<link href="<?php echo base_url(); ?>assets/prettify/prettify-mma.css" type="text/css" rel="stylesheet">
+	<script src='<?php echo base_url(); ?>assets/prettify/prettify.js'></script>
+	<script src='<?php echo base_url(); ?>assets/prettify/lang-mma.js'></script>
+		
 	<script type="text/x-mathjax-config">
 	MathJax.Hub.Config({
 	  tex2jax: {inlineMath: [['$','$'], ['\\(','\\)']]}
@@ -59,7 +72,7 @@
 			<?php if( is_logged_in() ): ?>
 			<div class="col-md-4">
 				<div class="list-group" style="margin-top: 20px;">
-				  <a href="<?php echo site_url('review/pending_new'); ?>" class="list-group-item">Review queue <span class="badge"><?php review_count(); ?></span></a>
+				  <a href="<?php echo site_url('review/pending_new'); ?>" class="list-group-item">Review queue <span class="badge <?php if(get_review_count() > 0) { echo 'progress-bar-warning'; }?>"><?php review_count(); ?></span></a>
 				  <a href="<?php echo site_url('account/logout'); ?>" class="list-group-item">Log out</a>
 				</div>
 			</div>

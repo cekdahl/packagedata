@@ -29,10 +29,11 @@
 			    
 			    <div class="form-group">
 			    	<label for="description">Usage examples</label>
-			    	<p>Only use this text field for substantial examples — otherwise leave it empty. A sentence or two does not warrant the use of this field, the content of which will be displayed on its own page separate from the package list. The user should be able to determine whether the package is good for him or not based on these examples.</p>
-			    	<p>The use of images is encouraged. Use an image host that is reliable, such as <a href="http://imgur.com/">imgur.com</a>. You can upload images directly from Mathematica to imgur with the <a href="https://github.com/halirutan/Mathematica-SE-Tools">Mathematica Tools for Stack Exchange</a> package.</p>
-			    	<p>HTML may be used to style the post. For example <code><?php echo htmlentities('<img src="url/image.png">'); ?></code> and <code><?php echo htmlentities('<b>bold</b>'); ?></code>.</p>
+			    	<p>Only use this text field for examples — otherwise leave it empty. A sentence or two is not enough to warrant the use of this field, the content of which will be displayed on its own page separate from the package list.</p>
+			    	<p>The use of images is encouraged. Use an image host that is reliable, such as <a href="http://imgur.com/">imgur.com</a>. Images can be uploaded directly from <i>Mathematica</i> to imgur with the <a href="https://github.com/halirutan/Mathematica-SE-Tools"><i>Mathematica Tools</i> for Stack Exchange</a> package.</p>
+			    	<p>Markdown, MathJax ($\LaTeX$) equations and HTML may be used to style the post.</p>
 			    	<textarea class="form-control" name="examples" id="examples" rows="5" placeholder=""><?php echo set_value('examples', $package['examples']); ?></textarea>
+			    	<div id="preview"></div>
 			    </div>
 			    
 			    <?php if( !is_logged_in() ): ?>

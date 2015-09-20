@@ -38,6 +38,11 @@ class Review_model extends CI_Model {
 		
 		foreach($packages as &$package)
 		{
+			if(isset($package['description_rendered']))
+			{
+				$package['description'] = $package['description_rendered'];
+			}
+		
 			$package['keywords'] = $this->get_keywords($package['id']);
 		}
 		
@@ -50,6 +55,11 @@ class Review_model extends CI_Model {
 				
 		foreach($packages as &$package)
 		{
+			if(isset($package['description_rendered']))
+			{
+				$package['description'] = $package['description_rendered'];
+			}
+			
 			$package['keywords'] = $this->get_keywords($package['id']);
 		}
 		
@@ -66,6 +76,11 @@ class Review_model extends CI_Model {
 			
 		foreach($packages as &$package)
 		{
+			if(isset($package['description_rendered']))
+			{
+				$package['description'] = $package['description_rendered'];
+			}
+			
 			$package['keywords'] = $this->get_keywords($package['id']);
 		}
 		
@@ -78,6 +93,11 @@ class Review_model extends CI_Model {
 		
 		foreach($packages as &$package)
 		{
+			if(isset($package['description_rendered']))
+			{
+				$package['description'] = $package['description_rendered'];
+			}
+		
 			$package['keywords'] = $this->get_keywords($package['id']);
 		}
 		
@@ -150,5 +170,24 @@ class Review_model extends CI_Model {
 		}
 		
 		return $arr;
+	}
+	
+	public function get_package_data($package_id)
+	{
+			$q = $this->db->get_where('packages', array(
+				'id' => $package_id
+			));
+			
+			if( $q->num_rows() > 0 )
+			{
+				$package = $q->row_array();
+				if(isset($package['description_rendered']))
+				{
+					$package['description'] = $package['description_rendered'];
+					return $package;
+				}
+			}
+			
+			return FALSE;
 	}
 }

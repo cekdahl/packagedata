@@ -92,6 +92,23 @@ class Review extends CI_Controller {
 	
 		load_template('trash', $data);
 	}
+	
+	public function examples()
+	{
+		$uri = $this->uri->uri_to_assoc();
+		
+		if( !isset($uri['id']) )
+		{
+			redirect('review/pending_new');
+		}
+		
+		$data = array(
+				'oauth_link' => oauth_link(),
+				'package' => $this->review_model->get_package_data($uri['id'])
+			);
+		
+		load_template('examples', $data);
+	}
 
 	public function publish($id)
 	{	

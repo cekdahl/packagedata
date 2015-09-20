@@ -125,3 +125,42 @@ if( ! function_exists('review_count'))
 		echo $CI->review_model->count_all_pending();
 	}
 }
+
+if( ! function_exists('get_review_count'))
+{
+	function get_review_count()
+	{
+		$CI =& get_instance();
+	
+		$CI->load->model('review_model');
+		return $CI->review_model->count_all_pending();
+	}
+}
+
+if( ! function_exists('packages_list_link'))
+{
+	function packages_list_link($sort, $keyword, $has_examples)
+	{
+		$args = array();
+		if(isset($sort))
+		{
+			$args['sort'] = $sort;
+		}
+		if(isset($keyword))
+		{
+			$args['keyword'] = $keyword;
+		}
+		if(isset($has_examples))
+		{
+			$args['has_examples'] = $has_examples;
+		}
+		
+		$link = '';
+		foreach($args as $key => $value)
+		{
+			$link .= $key . '/' . $value . '/';
+		}
+		
+		echo site_url('links/index/' . $link);
+	}
+}

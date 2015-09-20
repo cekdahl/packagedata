@@ -26,14 +26,19 @@ class Links extends CI_Controller {
 					$sort = 'newest';
 					break;
 				case 'popular':
-					$sort = 'popularity';
+					$sort = 'popular';
 			}
 		}
 		
+		$keyword = isset($uri['keyword']) ? $uri['keyword'] : NULL;
+		$has_examples = isset($uri['has_examples']) ? $uri['has_examples'] : 'false';
+		$packages = $this->packages_model->list_packages('published', $sort, $keyword, $has_examples);
 	
 		$data = array(
-			'packages' => $this->packages_model->list_packages('published', $sort),
+			'packages' => $packages,
 			'sort' => $sort,
+			'selected_keyword' => $keyword,
+			'has_examples' => $has_examples,
 			'oauth_link' => oauth_link()
 		);
 		
