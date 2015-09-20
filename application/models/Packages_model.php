@@ -217,6 +217,11 @@ class Packages_model extends CI_Model {
 				{
 					unset($packages[$key]);
 				}
+				
+				if(isset($package['description_rendered']))
+				{
+				    $packages[$key]['description'] = $package['description_rendered'];
+				}
 			}
 			
 			return $packages;
