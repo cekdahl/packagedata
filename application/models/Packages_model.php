@@ -199,7 +199,7 @@ class Packages_model extends CI_Model {
 		{
 			$this->db->order_by('timestamp', 'DESC');
 		}
-		elseif($sort == 'popularity')
+		elseif($sort == 'popular')
 		{
 			$tbl_packages = $this->db->dbprefix('packages');
 			$tbl_forwards = $this->db->dbprefix('forwards');
