@@ -4,7 +4,7 @@
 			<?php print_error_message(); ?>
 			<?php echo validation_errors(); ?>
 			<?php if( !is_logged_in() ): ?>
-			<div class="alert alert-info"><b>You are not authenticated!</b> Users who are authenticated as members of <i>Mathematica.StackExchange</i> with more than <b>2000 reputation points</b> can post packages that show up immediately without having to go through the review system that most submissions have to go through. <a href="<?php echo $oauth_link; ?>">Click here to be authenticated.</a></div>
+			<div class="alert alert-info">Submissions go through a review, so it can take a couple of hours before the submission appears on the site.</div>
 			<?php endif; ?>
 			<form action="<?php echo site_url('links/add'); ?>" method="POST">
 				<?php if( $package ): ?>
@@ -32,6 +32,15 @@
 			    	<p>Only use this text field for examples — otherwise leave it empty. A sentence or two is not enough to warrant the use of this field, the content of which will be displayed on its own page separate from the package list.</p>
 			    	<p>The use of images is encouraged. Use an image host that is reliable, such as <a href="http://imgur.com/">imgur.com</a>. Images can be uploaded directly from <i>Mathematica</i> to imgur with the <a href="https://github.com/halirutan/Mathematica-SE-Tools"><i>Mathematica Tools</i> for Stack Exchange</a> package.</p>
 			    	<p>Markdown, MathJax ($\LaTeX$) equations and HTML may be used to style the post.</p>
+			    	<p><div class="btn-toolbar">
+			    		<div class="btn-group">
+			    			<button type="button" class="btn btn-default" title="Code" id="btncode"><span class="glyphicon glyphicon-console"></span></button>
+			    			<button type="button" class="btn btn-default" title="Quote" id="btnquote"><span class="glyphicon glyphicon-comment"></span></button>
+			    			<button type="button" class="btn btn-default" title="Bold" id="btnbold"><span class="glyphicon glyphicon-bold"></span></button>
+			    			<button type="button" class="btn btn-default" title="Italic" id="btnitalic"><span class="glyphicon glyphicon-italic"></span></button>
+			    			<button type="button" class="btn btn-default" title="Link" id="btnlink"><span class="glyphicon glyphicon-link"></span></button>
+			    		</div>
+			    	</div></p>
 			    	<textarea class="form-control" name="examples" id="examples" rows="5" placeholder=""><?php echo set_value('examples', $package['examples']); ?></textarea>
 			    	<div id="preview"></div>
 			    </div>

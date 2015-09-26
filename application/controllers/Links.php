@@ -30,7 +30,21 @@ class Links extends CI_Controller {
 			}
 		}
 		
-		$keyword = isset($uri['keyword']) ? $uri['keyword'] : NULL;
+		$keyword = NULL;
+		$keyword_description = FALSE;
+		if(isset($uri['keyword']))
+		{
+			$keyword = urldecode($uri['keyword']);
+			
+			$this->config->load('keyword_descriptions');
+			$descriptions = $this->config->item('keyword_descriptions');
+			
+			if(isset($descriptions[$keyword]))
+			{
+				$keyword_description = $descriptions[$keyword];
+			}
+		}
+		
 		$has_examples = isset($uri['has_examples']) ? $uri['has_examples'] : 'false';
 		$packages = $this->packages_model->list_packages('published', $sort, $keyword, $has_examples);
 	
@@ -39,7 +53,8 @@ class Links extends CI_Controller {
 			'sort' => $sort,
 			'selected_keyword' => $keyword,
 			'has_examples' => $has_examples,
-			'oauth_link' => oauth_link()
+			'oauth_link' => oauth_link(),
+			'keyword_description' => $keyword_description
 		);
 		
 		load_template('packages', $data);
@@ -212,4 +227,8 @@ class Links extends CI_Controller {
 		redirect('links/');
 	}
 	
+	public function register_redirect($parent_id)
+	{
+		$this->packages_model->increment_forwards_count($parent_id);
+	}
 }

@@ -59,7 +59,7 @@ class Packages_model extends CI_Model {
 			{
 				$ins1 = $this->db->insert('packages', array(
 					'status' => 'published',
-					'name' => $this->input->post('name'),
+					'name' => trim($this->input->post('name')),
 					'url' => $this->input->post('url'),
 					'description' => $description,
 					'description_rendered' => $description_rendered,
@@ -80,7 +80,7 @@ class Packages_model extends CI_Model {
 				
 				$ins2 = $this->db->insert('packages', array(
 					'status' => 'pending',
-					'name' => $this->input->post('name'),
+					'name' => trim($this->input->post('name')),
 					'url' => $this->input->post('url'),
 					'description' => $this->input->post('description'),
 					'description_rendered' => $description_rendered,
@@ -222,6 +222,11 @@ class Packages_model extends CI_Model {
 				{
 				    $packages[$key]['description'] = $package['description_rendered'];
 				}
+				
+				if($has_examples == 'true' && !$packages[$key]['has_examples'])
+				{
+					unset($packages[$key]);
+				}
 			}
 			
 			return $packages;
@@ -256,6 +261,28 @@ class Packages_model extends CI_Model {
 		return $packages;
 	}
 	
+	public function list_packages_weekly()
+	{
+		$tbl_packages = $this->db->dbprefix('packages');
+		$tbl_forwards = $this->db->dbprefix('forwards');
+		
+		$weeks = $this->db->query("SELECT YEARWEEK( TIMESTAMP ) AS yw 
+								FROM $tbl_packages
+								GROUP BY yw
+								ORDER BY yw DESC")->result_array();
+		array_shift($weeks);
+		
+		$packages = array();
+		foreach($weeks as $week)
+		{
+			$packages[$week['yw']] = $this->db->query("SELECT $tbl_packages.*, YEARWEEK(TIMESTAMP) AS yw 
+										FROM $tbl_packages
+										WHERE YEARWEEK(TIMESTAMP) = {$week['yw']}")->result_array();
+		}
+		
+		return $packages;
+	}
+	
 	public function get_package_data($package_id)
 	{
 			$q = $this->db->get_where('packages', array(
@@ -266,12 +293,7 @@ class Packages_model extends CI_Model {
 			if( $q->num_rows() > 0 )
 			{
 				$package = $q->row_array();
-				
-				if(isset($package['description_rendered']))
-				{
-					$package['description'] = $package['description_rendered'];
-				}
-				
+								
 				return $package;
 			}
 			

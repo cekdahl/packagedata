@@ -27,11 +27,16 @@
 			</div>
 		</div>
 
+		<?php if($keyword_description): ?>
+		<hr>
+		<h3 style="margin: 0 auto; width: 60%; color: gray;"><?php echo $keyword_description; ?></h3>
+		<?php endif; ?>
+
 		<?php foreach($packages as $package): ?>
 		<hr />
 		<div class="row">
 			<div class="col-md-12">
-				<h2 id="package-<?php echo $package['parent_id']; ?>"><a href="<?php echo site_url('links/redirect_to/' . $package['id'] . '/' . $package['parent_id']); ?>"><?php echo $package['name']; ?></a></h2>
+				<h2 id="package-<?php echo $package['parent_id']; ?>"><a href="<?php echo $package['url']; ?>" class="outlink" data-id="<?php echo $package['parent_id']; ?>"><?php echo $package['name']; ?></a></h2>
 				<p><?php echo $package['description']; ?></p>
 				<?php if($package['has_examples']): ?>
 				<p><a href="<?php echo site_url('links/examples/id/' . $package['parent_id']); ?>" class="btn btn-default">Usage examples</a></p>

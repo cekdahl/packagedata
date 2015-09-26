@@ -5,7 +5,7 @@
     <meta http-equiv="X-UA-Compatible" content="IE=edge">
     <meta name="viewport" content="width=device-width, initial-scale=1">
     <!-- The above 3 meta tags *must* come first in the head; any other head content must come *after* these tags -->
-    <meta name="description" content="">
+    <meta name="description" content="A large community edited collection of Mathematica packages. It is the perfect place to share and find Mathematica packages.">
     <meta name="author" content="">
     <link rel="icon" href="assets/favicon.png">
 
@@ -27,6 +27,26 @@
 			background: #fafafa;
 			margin-top: 15px;
 			padding: 10px;
+		}
+		#logo {
+			background: url(<?php echo base_url(); ?>assets/Box_content.png);
+			background-repeat: no-repeat;
+			height: 64px;
+			padding-top: 10px;
+			padding-left: 80px;
+			margin-top: 20px;
+			margin-bottom: 0px;
+		}
+		
+		#logo a h1 {
+			font-size: 24px;
+			margin-top: 0px;
+			margin-bottom: 5px;
+		}
+		#logo h2 {
+			font-size: 18px;
+			margin-top: 0px;
+			margin-bottom: 0px;
 		}
 	</style>
    
@@ -67,7 +87,12 @@
 
 		<div class="row">
 			<div class="col-md-8">
-				<a href="<?php echo site_url(); ?>" title="Packages for Mathematica"><img src="<?php echo base_url(); ?>assets/logo.png" style="margin-top: 25px;" alt="Packages for Mathematica"></a>
+				<div id="logo">
+					<a href="<?php echo site_url(); ?>" title="Packages for Mathematica">
+						<h1>PackageData[]</h1>
+					</a>
+					<h2>Packages for Mathematica</h2>
+				</div>
 			</div>
 			<?php if( is_logged_in() ): ?>
 			<div class="col-md-4">

@@ -16,7 +16,7 @@ class Api extends CI_Controller {
 		
 		foreach($packages as &$package)
 		{
-			unset($package['id']);
+			$package['id'] = $package['parent_id'];
 			unset($package['parent_id']);
 			unset($package['user_id']);
 			unset($package['display_name']);
@@ -33,7 +33,6 @@ class Api extends CI_Controller {
 		foreach($packages as &$package)
 		{
 			unset($package['id']);
-			unset($package['parent_id']);
 			unset($package['user_id']);
 			unset($package['display_name']);
 			unset($package['status']);
