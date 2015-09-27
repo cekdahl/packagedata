@@ -217,18 +217,20 @@ class Packages_model extends CI_Model {
 				{
 					unset($packages[$key]);
 				}
-				
-				if(isset($package['description_rendered']))
+				else
 				{
-				    $packages[$key]['description'] = $package['description_rendered'];
-				}
-				
-				if($has_examples == 'true' && !$packages[$key]['has_examples'])
-				{
-					unset($packages[$key]);
+					if(isset($package['description_rendered']))
+					{
+					    $packages[$key]['description'] = $package['description_rendered'];
+					}
+					
+					if($has_examples == 'true' && !$packages[$key]['has_examples'])
+					{
+						unset($packages[$key]);
+					}
 				}
 			}
-			
+
 			return $packages;
 		}
 		else
