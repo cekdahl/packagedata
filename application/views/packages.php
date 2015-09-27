@@ -23,7 +23,7 @@
 				<? endif; ?>
 			</div>
 			<div class="col-md-2">
-				<a href="<?php echo site_url('links/add'); ?>" class="btn btn-default">Add package</a>
+				<a href="<?php echo site_url('links/add'); ?>" class="btn btn-primary">Add package</a>
 			</div>
 		</div>
 
