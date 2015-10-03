@@ -137,7 +137,10 @@ class Packages_model extends CI_Model {
 				}
 				
 				$this->add_keywords( $insert_id );
-								
+				
+				$this->load->model('github_model');
+				$this->github_model->update_release_data($insert_id);
+				
 				return TRUE;
 			}
 			
@@ -189,7 +192,7 @@ class Packages_model extends CI_Model {
 		}
 	}
 
-	public function list_packages($status = 'published', $sort = 'alphabetically', $keyword = NULL, $has_examples = 'false')
+	public function list_packages($status = 'published', $sort = 'alphabetically', $keyword = NULL, $has_examples = 'false', $has_download = 'false')
 	{
 		if($sort == 'alphabetically')
 		{
@@ -228,6 +231,11 @@ class Packages_model extends CI_Model {
 					{
 						unset($packages[$key]);
 					}
+					
+					if($has_download == 'true' && !isset($packages[$key]['latest_release']))
+					{
+						unset($packages[$key]);
+					}
 				}
 			}
 
@@ -258,9 +266,20 @@ class Packages_model extends CI_Model {
 		    {
 				unset($packages[$key]);
 		    }
+			elseif($has_download == 'true' && !isset($packages[$key]['latest_release']))
+			{
+			    unset($packages[$key]);
+			}
 		}
 		
 		return $packages;
+	}
+	
+	public function list_new_packages()
+	{
+		$packages = $this->db->where('id = parent_id')->order_by('timestamp', 'DESC')->get('packages');
+		
+		return $packages->result_array();
 	}
 	
 	public function list_packages_weekly()
@@ -285,21 +304,30 @@ class Packages_model extends CI_Model {
 		return $packages;
 	}
 	
-	public function get_package_data($package_id)
+	public function get_package_data($package_id, $parent = TRUE)
 	{
+		if($parent)
+		{	
 			$q = $this->db->get_where('packages', array(
 				'parent_id' => $package_id,
 				'status' => 'published'
 			));
-			
-			if( $q->num_rows() > 0 )
-			{
-				$package = $q->row_array();
-								
-				return $package;
-			}
-			
-			return FALSE;
+		}
+		else
+		{
+			$q = $this->db->get_where('packages', array(
+				'id' => $package_id
+			));
+		}
+		
+		if( $q->num_rows() > 0 )
+		{
+		    $package = $q->row_array();
+		    				
+		    return $package;
+		}
+		
+		return FALSE;
 	}
 	
 	public function get_keywords($post_id)
@@ -346,17 +374,17 @@ class Packages_model extends CI_Model {
 	}
 	
 	public function get_package_history($package_id)
-	{
+	{	
 		$tbl_packages = $this->db->dbprefix('packages');
 		$tbl_delete_requests = $this->db->dbprefix('delete_requests');
 		$packages = $this->db->query("(
-		SELECT 'link' as `type`, `id`, `status`, `name`, `url`, `description`, `description_rendered`, `timestamp`
+		SELECT 'link' as `type`, `id`, `status`, `name`, `url`, `description`, `description_rendered`, `has_examples`, `timestamp`
 		FROM `$tbl_packages`
 		WHERE parent_id = ?
 		)
 		UNION
 		(
-		SELECT 'request' as `type`, NULL, `status`, NULL AS `name`, NULL AS `url`, `comment` AS `description`, NULL AS `description_rendered`, `timestamp`
+		SELECT 'request' as `type`, NULL, `status`, NULL AS `name`, NULL AS `url`, `comment` AS `description`, NULL AS `description_rendered`, NULL AS `has_examples`, `timestamp`
 		FROM `$tbl_delete_requests`
 		WHERE package_id = ?
 		) ORDER BY `timestamp` DESC", array($package_id, $package_id))->result_array();

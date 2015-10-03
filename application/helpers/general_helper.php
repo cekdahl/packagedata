@@ -139,7 +139,7 @@ if( ! function_exists('get_review_count'))
 
 if( ! function_exists('packages_list_link'))
 {
-	function packages_list_link($sort, $keyword, $has_examples)
+	function packages_list_link($sort, $keyword, $has_examples, $has_download)
 	{
 		$args = array();
 		if(isset($sort))
@@ -153,6 +153,10 @@ if( ! function_exists('packages_list_link'))
 		if(isset($has_examples))
 		{
 			$args['has_examples'] = $has_examples;
+		}
+		if(isset($has_download))
+		{
+			$args['has_download'] = $has_download;
 		}
 		
 		$link = '';

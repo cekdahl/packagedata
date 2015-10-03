@@ -46,13 +46,15 @@ class Links extends CI_Controller {
 		}
 		
 		$has_examples = isset($uri['has_examples']) ? $uri['has_examples'] : 'false';
-		$packages = $this->packages_model->list_packages('published', $sort, $keyword, $has_examples);
+		$has_download = isset($uri['has_download']) ? $uri['has_download'] : 'false';
+		$packages = $this->packages_model->list_packages('published', $sort, $keyword, $has_examples, $has_download);
 	
 		$data = array(
 			'packages' => $packages,
 			'sort' => $sort,
 			'selected_keyword' => $keyword,
 			'has_examples' => $has_examples,
+			'has_download' => $has_download,
 			'oauth_link' => oauth_link(),
 			'keyword_description' => $keyword_description
 		);
@@ -204,6 +206,23 @@ class Links extends CI_Controller {
 		$data = array(
 				'oauth_link' => oauth_link(),
 				'package' => $this->packages_model->get_package_data($uri['id'])
+			);
+		
+		load_template('examples', $data);
+	}
+	
+	public function examples_history()
+	{
+		$uri = $this->uri->uri_to_assoc();
+		
+		if( !isset($uri['id']) )
+		{
+			redirect('links/');
+		}
+		
+		$data = array(
+				'oauth_link' => oauth_link(),
+				'package' => $this->packages_model->get_package_data($uri['id'], FALSE)
 			);
 		
 		load_template('examples', $data);

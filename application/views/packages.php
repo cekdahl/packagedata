@@ -2,21 +2,25 @@
 			<?php print_success_message(); ?>
 			<?php print_error_message(); ?>	
 			<div class="col-md-10 left-col">
-				<a href="<?php packages_list_link('alphabetically', $selected_keyword, $has_examples); ?>" class="btn btn-default">
+				<a href="<?php packages_list_link('alphabetically', $selected_keyword, $has_examples, $has_download); ?>" class="btn btn-default">
 					<?php if($sort == 'alphabetically') echo '<span class="glyphicon glyphicon-ok" aria-hidden="true"></span>'; ?> Alphabetically
 				</a>
-				<a href="<?php packages_list_link('newest', $selected_keyword, $has_examples); ?>" class="btn btn-default">
+				<a href="<?php packages_list_link('newest', $selected_keyword, $has_examples, $has_download); ?>" class="btn btn-default">
 					<?php if($sort == 'newest') echo '<span class="glyphicon glyphicon-ok" aria-hidden="true"></span>'; ?> Newest
 				</a>
-				<a href="<?php packages_list_link('popular', $selected_keyword, $has_examples); ?>" class="btn btn-default">
+				<a href="<?php packages_list_link('popular', $selected_keyword, $has_examples, $has_download); ?>" class="btn btn-default">
 					<?php if($sort == 'popular') echo '<span class="glyphicon glyphicon-ok" aria-hidden="true"></span>'; ?> Most popular
 				</a>
-				<a href="<?php packages_list_link($sort, $selected_keyword, $has_examples == 'false' ? 'true' : 'false'); ?>" class="btn btn-default">
+				<a href="<?php packages_list_link($sort, $selected_keyword, $has_examples == 'false' ? 'true' : 'false', $has_download); ?>" class="btn btn-default">
 					<?php if($has_examples == 'true') echo '<span class="glyphicon glyphicon-ok" aria-hidden="true"></span>'; ?>
 					Only with examples
 				</a>
+				<a href="<?php packages_list_link($sort, $selected_keyword, $has_examples, $has_download == 'false' ? 'true' : 'false'); ?>" class="btn btn-default">
+					<?php if($has_download == 'true') echo '<span class="glyphicon glyphicon-ok" aria-hidden="true"></span>'; ?>
+					Only with download
+				</a>
 				<?php if(isset($selected_keyword)): ?>
-				<a href="<?php packages_list_link($sort, NULL, $has_examples); ?>" class="btn btn-default">
+				<a href="<?php packages_list_link($sort, NULL, $has_examples, $has_download); ?>" class="btn btn-default">
 					<span class="glyphicon glyphicon-remove" aria-hidden="true"></span>
 					Remove keyword (<?php echo $selected_keyword; ?>)
 				</a>
@@ -38,14 +42,17 @@
 			<div class="col-md-12">
 				<h2 id="package-<?php echo $package['parent_id']; ?>"><a href="<?php echo $package['url']; ?>" class="outlink" data-id="<?php echo $package['parent_id']; ?>"><?php echo $package['name']; ?></a></h2>
 				<p><?php echo $package['description']; ?></p>
-				<?php if($package['has_examples']): ?>
-				<p><a href="<?php echo site_url('links/examples/id/' . $package['parent_id']); ?>" class="btn btn-default">Usage examples</a></p>
+				<p><?php if($package['has_examples']): ?>
+				<a href="<?php echo site_url('links/examples/id/' . $package['parent_id']); ?>" class="btn btn-default">Usage examples</a>
 				<?php endif; ?>
+				<?php if($package['latest_release']): ?>
+				<a href="<?php echo $package['latest_release']; ?>" class="btn btn-default">Download package</a>
+				<?php endif; ?></p>
 				<div class="row">
 					<div class="col-md-8 left-col-div">
 					<span class="label label-primary">Last updated <?php echo date('F j, Y', strtotime($package['timestamp'])); ?></span>
 					<?php foreach($package['keywords'] as $keyword): ?>
-						<span class="label label-default"><a href="<?php packages_list_link($sort, $keyword, $has_examples); ?>"><?php echo $keyword; ?></a></span>
+						<span class="label label-default"><a href="<?php packages_list_link($sort, $keyword, $has_examples, $has_download); ?>"><?php echo $keyword; ?></a></span>
 					<?php endforeach; ?>
 					</div>
 					<div class="col-md-4">

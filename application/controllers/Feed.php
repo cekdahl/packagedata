@@ -21,7 +21,7 @@ class Feed extends CI_Controller
         $data['page_description'] = 'New packages added to PackageData.net';
         $data['page_language'] = 'en-ca';
         $data['creator_email'] = 'admin@packagedata.net';
-        $data['posts'] = $this->packages_model->list_packages('published', 'newest');    
+        $data['posts'] = $this->packages_model->list_new_packages();    
 
         $this->output->set_content_type('application/rss+xml');
         

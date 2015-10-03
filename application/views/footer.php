@@ -24,7 +24,7 @@
       			</p>
       			<p>There are also two RSS feeds:
       				<ul>
-      					<li><a href="<?php echo site_url('feed'); ?>"><?php echo site_url('feed'); ?></a> informs about all new packages and updates to packages.</li>
+      					<li><a href="<?php echo site_url('feed'); ?>"><?php echo site_url('feed'); ?></a> informs about all new packages.</li>
       					<li><a href="<?php echo site_url('feed'); ?>"><?php echo site_url('feed/weekly'); ?></a> updates once a week with a summary over what packages have been updated or have been added during the last week.</li>
       				</ul>
       			</p>
@@ -54,6 +54,7 @@
 			
 				$('#examples').on('input propertychange', function() {
 				    $('#preview').html(marked($('#examples').val()));
+				    MathJax.Hub.Typeset();
 				});
 			}
 			
