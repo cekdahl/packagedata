@@ -119,6 +119,29 @@
 				var id = $(this).attr('data-id');
 				$.get('<?php echo site_url('links/register_redirect'); ?>/'+id);
 			});
+			
+			$('#package-name').on('input propertychange', function() {
+			    var package_name = $('#package-name').val();
+			    
+			    if(package_name.length > 4) {
+				    $.getJSON('<?php echo site_url('api/possible_duplicates'); ?>/'+package_name, function(data) {
+				    	var items = [];
+				    	$.each( data, function( key, package_data ) {
+				    	  items.push( "<li><a href='<?php echo site_url('links/index/#package-'); ?>"+package_data.parent_id+"'>" + package_data.name + "</a></li>" );
+				    	});
+				    	
+				    	if(data.length > 0) {
+				    		$('#duplicates').show().html('<p><b>Possible duplicates:</b></p><ul>'+items.join( "" )+'</ul>');
+				    	}
+				    	else {
+					    	$('#duplicates').hide();
+				    	}
+				    });
+				}
+				else {
+					$('#duplicates').hide();
+				}
+			});
 		});
 	</script>
   </body>

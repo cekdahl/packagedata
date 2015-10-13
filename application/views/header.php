@@ -28,6 +28,17 @@
 			margin-top: 15px;
 			padding: 10px;
 		}
+		#duplicates {
+			background: #fafafa;
+			margin-top: 15px;
+			padding: 10px;
+			display: none;
+		}
+		#duplicates ul {
+			list-style: none;
+			margin: 0;
+			padding: 0;
+		}
 		#logo {
 			background: url(<?php echo base_url(); ?>assets/Box_content.png);
 			background-repeat: no-repeat;
@@ -47,6 +58,16 @@
 			font-size: 18px;
 			margin-top: 0px;
 			margin-bottom: 0px;
+		}
+		.tutorial h1, .tutorial h2, .tutorial h3 {
+			border-bottom: 1px solid #eee;
+			padding-bottom: 10px;
+		}
+		.tutorial ol {
+			list-style-type: upper-roman;
+		}
+		.tutorial ol ol {
+			list-style-type: lower-latin;
 		}
 	</style>
    
@@ -110,5 +131,13 @@
 			</div>
 			<?php endif; ?>
 		</div>
+		<?php if(isset($frontpage) && FALSE): ?>
+		<div class="jumbotron">
+		  <p>PackageData is a community moderated directory of Mathematica packages from all over the Internet.</p>
+		  <p>
+		  	<a class="btn btn-primary btn-lg left-col" href="<?php echo site_url('links/tutorial'); ?>" role="button">Learn how to make a package</a>
+		  </p>
+		</div>
+		<?php endif; ?>
 		
 		<hr />

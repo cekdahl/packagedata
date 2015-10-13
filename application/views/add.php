@@ -8,11 +8,12 @@
 			<?php endif; ?>
 			<form action="<?php echo site_url('links/add'); ?>" method="POST">
 				<?php if( $package ): ?>
-					<input type="hidden" name="parent_id" value="<?php echo $package['parent_id']; ?>" />
+					<input type="hidden" name="parent_id" value="<?php echo $package['parent_id']; ?>" autocomplete="off" />
 				<?php endif; ?>
 			    <div class="form-group">
 			    	<label for="name">Package name</label>
-			    	<input type="text" name="name" class="form-control" id="name" value="<?php echo set_value('name', $package['name']); ?>" placeholder="Name">
+			    	<input type="text" name="name" class="form-control" id="package-name" value="<?php echo set_value('name', $package['name']); ?>" placeholder="Name">
+			    	<div id="duplicates"></div>
 			    </div>
 			    <div class="form-group">
 			    	<label for="url">URL</label>

@@ -56,7 +56,8 @@ class Links extends CI_Controller {
 			'has_examples' => $has_examples,
 			'has_download' => $has_download,
 			'oauth_link' => oauth_link(),
-			'keyword_description' => $keyword_description
+			'keyword_description' => $keyword_description,
+			'frontpage' => TRUE
 		);
 		
 		load_template('packages', $data);
@@ -249,5 +250,10 @@ class Links extends CI_Controller {
 	public function register_redirect($parent_id)
 	{
 		$this->packages_model->increment_forwards_count($parent_id);
+	}
+	
+	public function tutorial()
+	{
+		load_template('tutorial', array('oauth_link' => oauth_link()));
 	}
 }

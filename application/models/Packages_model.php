@@ -304,6 +304,13 @@ class Packages_model extends CI_Model {
 		return $packages;
 	}
 	
+	public function list_possible_duplicates($partial_name)
+	{
+		$packages = $this->db->like('name', $partial_name)->where('status', 'published')->get('packages');
+		
+		return $packages->result_array();
+	}
+	
 	public function get_package_data($package_id, $parent = TRUE)
 	{
 		if($parent)
@@ -448,7 +455,7 @@ class Packages_model extends CI_Model {
 		$this->form_validation->set_rules('explanation', 'explanation', 'required|min_length[15]|max_length[10000]');
 		
 		if( $this->form_validation->run() )
-		{			
+		{
 			$this->db->insert('delete_requests', array(
 				'package_id' => $id,
 				'status' => isset($_SESSION['logged_in']) ? 'approved' : 'pending',

@@ -58,7 +58,8 @@
 					<div class="col-md-4">
 					<a href="<?php echo site_url('links/history/id/' . $package['parent_id']); ?>" class="btn btn-default btn-xs pull-right" style="margin-left:5px;">History</a>
 					<a href="<?php echo site_url('links/delete/id/' . $package['parent_id']); ?>" class="btn btn-default btn-xs pull-right" style="margin-left:5px;">Delete</a>
-					<a href="<?php echo site_url('links/add/id/' . $package['parent_id']); ?>" class="btn btn-default btn-xs pull-right">Edit</a>
+					<a href="<?php echo site_url('links/add/id/' . $package['parent_id']); ?>" class="btn btn-default btn-xs pull-right" style="margin-left:5px;">Edit</a>
+					<a href="<?php echo site_url('#package-' . $package['parent_id']); ?>" class="btn btn-default btn-xs pull-right">Link</a>
 					</div>
 				</div>
 			</div>

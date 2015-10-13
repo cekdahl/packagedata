@@ -40,4 +40,19 @@ class Api extends CI_Controller {
 		
 		echo json_encode($packages);
 	}
+	
+	public function possible_duplicates($partial_name)
+	{
+		$possible_duplicates = $this->packages_model->list_possible_duplicates($partial_name);
+
+		foreach($possible_duplicates as &$package)
+		{
+			unset($package['id']);
+			unset($package['user_id']);
+			unset($package['display_name']);
+			unset($package['status']);
+		}
+
+		echo json_encode($possible_duplicates);
+	}
 }
