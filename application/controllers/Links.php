@@ -256,4 +256,40 @@ class Links extends CI_Controller {
 	{
 		load_template('tutorial', array('oauth_link' => oauth_link()));
 	}
+	
+	public function upload_image()
+	{
+		$this->load->model('captcha_model');
+		if( !$this->captcha_model->validate() )
+		{
+		    echo json_encode(array(
+		    	'error' => 'reCaptcha could not be validated.'
+		    ));
+		}
+		else
+		{
+			$config['upload_path'] = './uploads/images';
+			$config['allowed_types'] = 'gif|jpg|png';
+			$config['max_size']     = '2000';
+			$config['max_width'] = '1024';
+			$config['max_height'] = '768';
+			$config['encrypt_name'] = TRUE;
+			
+			$this->load->library('upload', $config);
+			
+			if ( ! $this->upload->do_upload('file'))
+			{
+				echo json_encode(array(
+					'error' => $this->upload->display_errors()
+				));
+			}
+			else
+			{
+				echo json_encode(array(
+				    'error' => FALSE,
+				    'name' => $this->upload->data('file_name')
+				));
+			}
+		}
+	}
 }

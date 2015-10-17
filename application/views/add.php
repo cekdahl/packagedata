@@ -30,30 +30,56 @@
 			    
 			    <div class="form-group">
 			    	<label for="description">Usage examples</label>
-			    	<p>Only use this text field for examples — otherwise leave it empty. A sentence or two is not enough to warrant the use of this field, the content of which will be displayed on its own page separate from the package list.</p>
-			    	<p>The use of images is encouraged. Use an image host that is reliable, such as <a href="http://imgur.com/">imgur.com</a>. Images can be uploaded directly from <i>Mathematica</i> to imgur with the <a href="https://github.com/halirutan/Mathematica-SE-Tools"><i>Mathematica Tools</i> for Stack Exchange</a> package.</p>
-			    	<p>Markdown, MathJax ($\LaTeX$) equations and HTML may be used to style the post.</p>
-			    	<p><div class="btn-toolbar">
+			    	<p>Only use this text field for examples — otherwise leave it empty. A sentence or two is not enough to warrant the use of this field, the content of which will be displayed on its own page separate from the package list. Markdown, MathJax ($\LaTeX$) equations and HTML may be used to style the post.</p>
+			    	<p id="editorToolbar"><div class="btn-toolbar">
 			    		<div class="btn-group">
 			    			<button type="button" class="btn btn-default" title="Code" id="btncode"><span class="glyphicon glyphicon-console"></span></button>
 			    			<button type="button" class="btn btn-default" title="Quote" id="btnquote"><span class="glyphicon glyphicon-comment"></span></button>
 			    			<button type="button" class="btn btn-default" title="Bold" id="btnbold"><span class="glyphicon glyphicon-bold"></span></button>
 			    			<button type="button" class="btn btn-default" title="Italic" id="btnitalic"><span class="glyphicon glyphicon-italic"></span></button>
 			    			<button type="button" class="btn btn-default" title="Link" id="btnlink"><span class="glyphicon glyphicon-link"></span></button>
+			    			<button type="button" class="btn btn-default" title="Upload image" id="btnlink" data-toggle="modal" data-target="#uploadImageModal"><span class="glyphicon glyphicon-picture"></span></button>
 			    		</div>
 			    	</div></p>
+			    	
 			    	<textarea class="form-control" name="examples" id="examples" rows="5" placeholder=""><?php echo set_value('examples', $package['examples']); ?></textarea>
 			    	<div id="preview"></div>
 			    </div>
 			    
 			    <?php if( !is_logged_in() ): ?>
-					<p><div class="g-recaptcha" data-sitekey="<?php echo $this->config->item('captcha_key'); ?>"></div></p>
+					<p><div id="recaptcha1" class="g-recaptcha" data-sitekey="<?php echo $this->config->item('captcha_key'); ?>"></div></p>
 				<?php endif; ?>
 			    
 			    <div class="form-group">
 			    	<input type="submit" class="btn btn-default" value="Submit">
 			    </div>
 			<form>
+			
+			<form action="javascript:alert(grecaptcha.getResponse(recaptcha2));">
+				<div class="modal fade" id="uploadImageModal" tabindex="-1">
+					<div class="modal-dialog">
+						<div class="modal-content">
+							<div class="modal-header">
+								<button type="button" class="close" data-dismiss="modal"><span>&times;</span></button>
+								<h4 class="modal-title">Upload image</h4>
+							</div>
+							<div class="modal-body"><div id="selectFileArea">
+								<p><input type="file" id="selectImageFile"></p>
+								<div id="dropZone" class="panel panel-default">
+									<div class="panel-body">
+									  <h3>Or drop file here</h3>
+									</div>
+								</div></div>
+								<p><div id="recaptcha2" class="g-recaptcha" data-sitekey="<?php echo $this->config->item('captcha_key'); ?>"></div></p>
+							</div>
+							<div class="modal-footer">
+								<button type="button" class="btn btn-default" data-dismiss="modal">Cancel</button>
+								<button type="button" id="submitImageUpload" class="btn btn-primary" disabled="true">Upload image</button>
+							</div>
+						</div>
+					<div>
+				</div>
+			</form>
 		</div>
 
 		</div>

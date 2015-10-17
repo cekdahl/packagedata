@@ -77,8 +77,6 @@
       <script src="https://oss.maxcdn.com/respond/1.4.2/respond.min.js"></script>
     <![endif]-->
     
-	<script src='https://www.google.com/recaptcha/api.js'></script>
-	
 	<link href="<?php echo base_url(); ?>assets/prettify/prettify.css" type="text/css" rel="stylesheet">
 	<link href="<?php echo base_url(); ?>assets/prettify/prettify-mma.css" type="text/css" rel="stylesheet">
 	<script src='<?php echo base_url(); ?>assets/prettify/prettify.js'></script>

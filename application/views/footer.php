@@ -45,6 +45,7 @@
     <script src="<?php echo base_url(); ?>assets/ie10-viewport-bug-workaround.js"></script>
  	<script src='<?php echo base_url(); ?>assets/marked.js'></script>
  	
+ 	<script src='https://www.google.com/recaptcha/api.js?render=explicit&onload=CaptchaCallback'></script>
 	<script type="text/javascript">
 		$(document).ready(function() {
 			prettyPrint();
@@ -142,7 +143,82 @@
 					$('#duplicates').hide();
 				}
 			});
+						
+			$('.modal-body').on('dragover', '#dropZone', function(event) {
+			    event.preventDefault();  
+			    event.stopPropagation();
+			    $(this).find(".panel-body h3").html("Drop file now");
+			});
+			
+			$('.modal-body').on('dragleave', '#dropZone', function(event) {
+			    event.preventDefault();  
+			    event.stopPropagation();
+			    $(this).find(".panel-body h3").html("Drop file here");
+			});
+			
+			$('.modal-body').on('drop', '#dropZone', function(event) {
+			    event.preventDefault();
+			    event.stopPropagation();
+			    var files = event.originalEvent.dataTransfer.files;
+			    file = files[0];
+			    $("#selectFileArea").html('<div class="alert alert-success">Selected '+file.name+'</div>');
+			    $("#submitImageUpload").removeClass("disabled").removeAttr("disabled");
+			});
+	
+			$('.modal-body').on('change', '#selectImageFile', function() {
+				file = this.files[0];
+			    $("#selectFileArea").html('<div class="alert alert-success">Selected '+file.name+'</div>');
+			    $("#submitImageUpload").removeClass("disabled").removeAttr("disabled");
+			});
+	
+			$('#uploadImageModal').on('shown.bs.modal', function () {
+			    recaptcha2 = grecaptcha.render('recaptcha2', {'sitekey' : '<?php echo $this->config->item('captcha_key'); ?>'});
+			});
+			
+			$('#uploadImageModal').on('hide.bs.modal', function () {
+			    $("#recaptcha2").empty();
+			});
+			
+			$('#submitImageUpload').click(function() {
+			    $("#submitImageUpload").text('Uploading...').addClass("disabled").attr("disabled","true");
+			
+				var formdata = new FormData();
+				formdata.append('g-recaptcha-response', grecaptcha.getResponse(recaptcha2));
+				formdata.append('file', file);
+			
+				$.ajax({
+					type: 'post',
+					url: '<?php echo site_url('links/upload_image'); ?>',
+					data: formdata,
+					cache: false,
+					contentType: false,
+					processData: false,
+					dataType: 'json',
+					success: function(data) {
+					console.log(data);
+				    	if(!data.error) {
+				    		new_text = $('#examples').val() + '![title](<?php echo base_url('uploads/images') . '/'; ?>'+data.name+')';
+				    		$('#examples').val(new_text);
+				    		$('#preview').html(marked(new_text));
+				    	}
+				    	else {
+				    		$('#editorToolbar').append('<div class="alert alert-danger alert-dismissible"><button type="button" class="close" data-dismiss="alert" aria-label="Close"><span aria-hidden="true">×</span></button>'+data.error+'</div>');
+				    	}
+				    	
+				    	$("#uploadImageModal").modal('hide');
+				    	
+						$("#submitImageUpload").text('Upload image');
+						$("#selectFileArea").html('<p><input type="file" id="selectImageFile"></p><div id="dropZone" class="panel panel-default"><div class="panel-body"><h3>Or drop file here</h3></div></div>');
+					}
+				});
+				
+			});
+
 		});
+		
+		var CaptchaCallback = function() {
+			recaptcha1 = grecaptcha.render('recaptcha1', {'sitekey' : '<?php echo $this->config->item('captcha_key'); ?>'});
+		}
 	</script>
   </body>
 </html>
