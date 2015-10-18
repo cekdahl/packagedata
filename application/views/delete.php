@@ -2,7 +2,7 @@
 			<div class="col-md-12">
 			<?php echo validation_errors(); ?>
 			<?php if( !is_logged_in() ): ?>
-			<div class="alert alert-info"><b>You are not authenticated!</b> Users who are authenticated as members of <i>Mathematica.StackExchange</i> with more than <b>2000 reputation points</b> can delete links without having to go through the review system that most delete requests have to go through. <a href="<?php echo $oauth_link; ?>">Click here to be authenticated.</a></div>
+			<div class="alert alert-info">Delete requests will go through a review process to be accepted or rejected.</div>
 			<?php endif; ?>
 			<form action="<?php echo site_url('links/delete/id/' . $parent_id); ?>" method="POST">
 				<input type="hidden" name="parent_id" value="<?php echo $parent_id; ?>" />

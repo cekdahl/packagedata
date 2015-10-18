@@ -39,25 +39,16 @@
 			margin: 0;
 			padding: 0;
 		}
-		#logo {
-			background: url(<?php echo base_url(); ?>assets/Box_content.png);
-			background-repeat: no-repeat;
-			height: 64px;
-			padding-top: 10px;
-			padding-left: 80px;
-			margin-top: 20px;
-			margin-bottom: 0px;
+		.logo {
+			display: block;
+			text-align: center;
+			font-family: Helvetica-neue;
+			font-style: italic;
+			color: black;
 		}
-		
-		#logo a h1 {
-			font-size: 24px;
-			margin-top: 0px;
-			margin-bottom: 5px;
-		}
-		#logo h2 {
-			font-size: 18px;
-			margin-top: 0px;
-			margin-bottom: 0px;
+		a.logo:hover {
+			text-decoration: none;
+			color: black;
 		}
 		.tutorial h1, .tutorial h2, .tutorial h3 {
 			border-bottom: 1px solid #eee;
@@ -105,29 +96,11 @@
     <div class="container">
 
 		<div class="row">
-			<div class="col-md-8">
-				<div id="logo">
-					<a href="<?php echo site_url(); ?>" title="Packages for Mathematica">
-						<h1>PackageData[]</h1>
-					</a>
-					<h2>Packages for Mathematica</h2>
-				</div>
+			<div class="col-md-12">
+				<a href="<?php echo site_url(); ?>" title="Packages for Mathematica" class="logo">
+				    <h1>Mathematica Package Repository</h1>
+				</a>
 			</div>
-			<?php if( is_logged_in() ): ?>
-			<div class="col-md-4">
-				<div class="list-group" style="margin-top: 20px;">
-				  <a href="<?php echo site_url('review/pending_new'); ?>" class="list-group-item">Review queue <span class="badge <?php if(get_review_count() > 0) { echo 'progress-bar-warning'; }?>"><?php review_count(); ?></span></a>
-				  <a href="<?php echo site_url('account/logout'); ?>" class="list-group-item">Log out</a>
-				</div>
-			</div>
-			<?php else: ?>
-			<div class="col-md-4">
-				<p style="margin-top: 20px;"><i><a href="http://mathematica.stackexchange.com/" title="Mathematica.StackExchange">Mathematica.StackExchange</a></i> users with more than 2000 reputation points can authenticate themselves for additional functionality.</p>
-				<div class="list-group">
-				  <a href="<?php echo $oauth_link; ?>" class="list-group-item">Log in</a>
-				</div>
-			</div>
-			<?php endif; ?>
 		</div>
 		<?php if(isset($frontpage) && FALSE): ?>
 		<div class="jumbotron">

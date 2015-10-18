@@ -4,13 +4,25 @@
       	<div class="row">
       		<div class="col-md-6">
       			<h4>About</h4>
-	  			<p>If you have question about this project, you can talk to <i>Mathematica.SE</i> users in the <i>Mathematica.SE</i> <a href="http://chat.stackexchange.com/rooms/2234/wolfram-mathematica">chat room</a> or contact the administrator at <a href="mailto:admin@packagedata.net">admin@packagedata.net</a>. The PHP source code of this site is available at <a href="https://github.com/cekdahl/packagedata">Github</a>.
+	  			<p>If you have question about this project, you can talk to <i>Mathematica.SE</i> users in the <i>Mathematica.SE</i> <a href="http://chat.stackexchange.com/rooms/29579/packagedata-net">chat room</a> or contact the administrator at <a href="mailto:admin@packagedata.net">admin@packagedata.net</a>. The PHP source code of this site is available at <a href="https://github.com/cekdahl/packagedata">Github</a>.
 	  			</p>
+      			<p>This site was built from the ground up to make it as easy as possible for anonymous users to pitch in. You are strongly encouraged to submit links to any packages that you know of that are not in this list, or to submit updates to existing links. This can be a small improvement, or usage examples for a package that doesn't have any yet.</p>
       		</div>
-      		<div class="col-md-6">
-      			<h4>Installing Mathematica packages</h4>
-      			<p>Best practice is to put packages (.m/.wl files and dependencies) in the directory <code>FileNameJoin[{$UserBaseDirectory, "Applications"}]</code>. <i>Mathematica</i> has a built-in tool for placing .m files, .wl files or files in a .zip archive in that directory called "Install" under the menu "File". The main benefit of using said directory for packages is that when a new <i>Mathematica</i> version is installed, packages will automatically be available.</p>
-      		</div>
+			<?php if( is_logged_in() ): ?>
+			<div class="col-md-6">
+				<div class="list-group" style="margin-top: 20px;">
+				  <a href="<?php echo site_url('review/pending_new'); ?>" class="list-group-item">Review queue <span class="badge <?php if(get_review_count() > 0) { echo 'progress-bar-warning'; }?>"><?php review_count(); ?></span></a>
+				  <a href="<?php echo site_url('account/logout'); ?>" class="list-group-item">Log out</a>
+				</div>
+			</div>
+			<?php else: ?>
+			<div class="col-md-6">
+				<p style="margin-top: 20px;"><i><a href="http://mathematica.stackexchange.com/" title="Mathematica.StackExchange">Mathematica.StackExchange</a></i> users with more than 2000 reputation points can authenticate themselves for additional functionality.</p>
+				<div class="list-group">
+				  <a href="<?php echo $oauth_link; ?>" class="list-group-item">Log in</a>
+				</div>
+			</div>
+			<?php endif; ?>
       	</div>
 	  	<hr />
       	<div class="row">
@@ -30,8 +42,8 @@
       			</p>
       		</div>
       		<div class="col-md-6">
-      			<h4>Get involved</h4>
-      			<p>This site was built from the ground up to make it as easy as possible for anonymous users to pitch in. You are strongly encouraged to submit links to any packages that you know of that's not in this list, or to submit updates to existing links. This can be a small improvement, or usage examples for a package that doesn't have any yet.</p>
+      			<h4>Installing Mathematica packages</h4>
+      			<p>Best practice is to put packages (.m/.wl files and dependencies) in the directory <code>FileNameJoin[{$UserBaseDirectory, "Applications"}]</code>. <i>Mathematica</i> has a built-in tool for placing .m files, .wl files or files in a .zip archive in that directory, called "Install" under the menu "File". The main benefit of using said directory for packages is that when a new <i>Mathematica</i> version is installed, packages will automatically be available.</p>
       		</div>
       	</div>
       </footer>
@@ -213,6 +225,14 @@
 				});
 				
 			});
+
+			/* $('.package-toolbar').hide();
+			
+			$('.package').hover(function() {
+				$(this).find('.package-toolbar').stop().fadeIn();
+			}, function() {
+				$(this).find('.package-toolbar').stop().fadeOut();
+			}); */
 
 		});
 		

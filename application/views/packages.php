@@ -8,9 +8,9 @@
 				<a href="<?php packages_list_link('newest', $selected_keyword, $has_examples, $has_download); ?>" class="btn btn-default">
 					<?php if($sort == 'newest') echo '<span class="glyphicon glyphicon-ok" aria-hidden="true"></span>'; ?> Newest
 				</a>
-				<a href="<?php packages_list_link('popular', $selected_keyword, $has_examples, $has_download); ?>" class="btn btn-default">
+				<?php /* <a href="<?php packages_list_link('popular', $selected_keyword, $has_examples, $has_download); ?>" class="btn btn-default">
 					<?php if($sort == 'popular') echo '<span class="glyphicon glyphicon-ok" aria-hidden="true"></span>'; ?> Most popular
-				</a>
+				</a> */ ?>
 				<a href="<?php packages_list_link($sort, $selected_keyword, $has_examples == 'false' ? 'true' : 'false', $has_download); ?>" class="btn btn-default">
 					<?php if($has_examples == 'true') echo '<span class="glyphicon glyphicon-ok" aria-hidden="true"></span>'; ?>
 					Only with examples
@@ -39,7 +39,7 @@
 		<?php foreach($packages as $package): ?>
 		<hr />
 		<div class="row">
-			<div class="col-md-12">
+			<div class="col-md-12 package">
 				<h2 id="package-<?php echo $package['parent_id']; ?>"><a href="<?php echo $package['url']; ?>" class="outlink" data-id="<?php echo $package['parent_id']; ?>"><?php echo $package['name']; ?></a></h2>
 				<p><?php echo $package['description']; ?></p>
 				<p><?php if($package['has_examples']): ?>
@@ -48,19 +48,19 @@
 				<?php if($package['latest_release']): ?>
 				<a href="<?php echo $package['latest_release']; ?>" class="btn btn-default">Download package</a>
 				<?php endif; ?></p>
-				<div class="row">
+				<div class="row" style="height: 25px;">
 					<div class="col-md-8 left-col-div">
 					<span class="label label-primary">Last updated <?php echo date('F j, Y', strtotime($package['timestamp'])); ?></span>
 					<?php foreach($package['keywords'] as $keyword): ?>
 						<span class="label label-default"><a href="<?php packages_list_link($sort, $keyword, $has_examples, $has_download); ?>"><?php echo $keyword; ?></a></span>
 					<?php endforeach; ?>
 					</div>
-					<div class="col-md-4">
+					<div class="col-md-4"><div class="package-toolbar">
 					<a href="<?php echo site_url('links/history/id/' . $package['parent_id']); ?>" class="btn btn-default btn-xs pull-right" style="margin-left:5px;">History</a>
 					<a href="<?php echo site_url('links/delete/id/' . $package['parent_id']); ?>" class="btn btn-default btn-xs pull-right" style="margin-left:5px;">Delete</a>
 					<a href="<?php echo site_url('links/add/id/' . $package['parent_id']); ?>" class="btn btn-default btn-xs pull-right" style="margin-left:5px;">Edit</a>
 					<a href="<?php echo site_url('#package-' . $package['parent_id']); ?>" class="btn btn-default btn-xs pull-right">Link</a>
-					</div>
+					</div></div>
 				</div>
 			</div>
 		</div>
