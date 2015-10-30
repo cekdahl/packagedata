@@ -49,6 +49,15 @@ class Links extends CI_Controller {
 		$has_download = isset($uri['has_download']) ? $uri['has_download'] : 'false';
 		$packages = $this->packages_model->list_packages('published', $sort, $keyword, $has_examples, $has_download);
 	
+	
+		$this->load->model('review_model');
+		$counts = array(
+			'all' => $this->review_model->count_all_pending(),
+			'new' => $this->review_model->count_pending_new(),
+			'updates' => $this->review_model->count_pending_updates(),
+			'delete_requests' => $this->review_model->count_pending_delete_requests()
+		);
+	
 		$data = array(
 			'packages' => $packages,
 			'sort' => $sort,
@@ -57,7 +66,8 @@ class Links extends CI_Controller {
 			'has_download' => $has_download,
 			'oauth_link' => oauth_link(),
 			'keyword_description' => $keyword_description,
-			'frontpage' => TRUE
+			'frontpage' => TRUE,
+			'counts' => $counts
 		);
 		
 		load_template('packages', $data);

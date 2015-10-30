@@ -31,6 +31,17 @@
 			</div>
 		</div>
 
+		<?php if(is_logged_in()): ?>
+		<hr />
+		<div class="row">
+			<div class="col-md-12 left-col">
+				<a href="<?php echo site_url('review/pending_new'); ?>" class="btn btn-default">New <span class="badge" style="background-color:#555;"><?php echo $counts['new']; ?></span></a>
+				<a href="<?php echo site_url('review/pending_updates'); ?>" class="btn btn-default">Updates <span class="badge" style="background-color:#555;"><?php echo $counts['updates']; ?></span></a>
+				<a href="<?php echo site_url('review/pending_delete_requests'); ?>" class="btn btn-default">Delete requests <span class="badge" style="background-color:#555;"><?php echo $counts['delete_requests']; ?></span></a>
+			</div>
+		</div>
+		<?php endif; ?>
+
 		<?php if($keyword_description): ?>
 		<hr>
 		<h3 style="margin: 0 auto; width: 60%; color: gray;"><?php echo $keyword_description; ?></h3>

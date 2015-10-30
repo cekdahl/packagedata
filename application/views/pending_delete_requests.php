@@ -18,8 +18,8 @@
 			<div class="col-md-12">
 				<h2><a href="<?php echo $request['url']; ?>"><?php echo $request['name']; ?></a></h2>
 				<p><?php echo $request['description']; ?></p>
-				<?php if($package['has_examples']): ?>
-				<p><a href="<?php echo site_url('review/examples/id/' . $package['id']); ?>" class="btn btn-default">Usage examples</a></p>
+				<?php if($request['has_examples']): ?>
+				<p><a href="<?php echo site_url('review/examples/id/' . $request['id']); ?>" class="btn btn-default">Usage examples</a></p>
 				<?php endif; ?>
 				<div class="panel panel-primary">
 					<div class="panel-heading">Reason for delete request:</div>
